@@ -14,9 +14,8 @@ public class CoreConsumerDriver {
 
 	public static void main(String[] args) {
 		
-		ServerLocator locator = ArtemisHelper.getServerLocator();
-		
-		try (ClientSessionFactory factory = locator.createSessionFactory(); 
+		try (ServerLocator locator = ArtemisHelper.getServerLocator();
+			 ClientSessionFactory factory = locator.createSessionFactory(); 
 			 ClientSession session = factory.createSession()) {
 			
 			session.createQueue(ADDRESS_NAME, QUEUE_NAME, true);
@@ -28,7 +27,6 @@ public class CoreConsumerDriver {
 			ClientMessage message = consumer.receive();
 			System.out.println("message = " + message.getBodyBuffer().readString());
 
-			locator.close();
 			System.out.println("Consumer done!");
 		} catch (ActiveMQException e) {
 			System.err.println("Problem with the session: " + e.getMessage());

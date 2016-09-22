@@ -12,9 +12,8 @@ public class CoreProducerDriver {
 
 	public static void main(String[] args) {
 		
-		ServerLocator locator = ArtemisHelper.getServerLocator();
-		
-		try (ClientSessionFactory factory = locator.createSessionFactory();
+		try (ServerLocator locator = ArtemisHelper.getServerLocator();
+			 ClientSessionFactory factory = locator.createSessionFactory();
 			 ClientSession session = factory.createSession()) {
 			
 			ClientProducer producer = session.createProducer(ADDRESS_NAME);
