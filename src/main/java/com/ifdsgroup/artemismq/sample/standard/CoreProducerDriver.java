@@ -8,23 +8,21 @@ import org.apache.activemq.artemis.api.core.client.ServerLocator;
 
 public class CoreProducerDriver {
 
-	private static final String ADDRESS_NAME = "example";
+	private static final String ADDRESS_NAME = "jms.queue.queues/OrderQueue";
 
 	public static void main(String[] args) {
 		
 		ServerLocator locator = ArtemisHelper.getServerLocator();
 		
-		try {
-			ClientSessionFactory factory = locator.createSessionFactory();
-			ClientSession session = factory.createSession();
+		try (ClientSessionFactory factory = locator.createSessionFactory();
+			 ClientSession session = factory.createSession()) {
 			
 			ClientProducer producer = session.createProducer(ADDRESS_NAME);
 			ClientMessage message = session.createMessage(true);
 			
-			message.getBodyBuffer().writeString("Fourth core messsage");
+			message.getBodyBuffer().writeString("Fifth core messsage");
 			producer.send(message);
-			producer.close();
-			session.close();
+
 			System.out.println("Producer done!");
 		} catch (Exception e) {
 			System.err.println("Problem creating the session factory: " + e.getMessage());

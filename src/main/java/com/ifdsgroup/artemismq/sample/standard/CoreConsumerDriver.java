@@ -9,16 +9,15 @@ import org.apache.activemq.artemis.api.core.client.ServerLocator;
 
 public class CoreConsumerDriver {
 
-	private static final String ADDRESS_NAME = "example";
-	private static final String QUEUE_NAME = "example";
+	private static final String ADDRESS_NAME = "jms.queue.queues/OrderQueue";
+	private static final String QUEUE_NAME = "jms.queue.queues/OrderQueue";
 
 	public static void main(String[] args) {
 		
 		ServerLocator locator = ArtemisHelper.getServerLocator();
 		
-		try {
-			ClientSessionFactory factory = locator.createSessionFactory();
-			ClientSession session = factory.createSession();
+		try (ClientSessionFactory factory = locator.createSessionFactory(); 
+			 ClientSession session = factory.createSession()) {
 			
 			session.createQueue(ADDRESS_NAME, QUEUE_NAME, true);
 			
@@ -29,8 +28,7 @@ public class CoreConsumerDriver {
 			ClientMessage message = consumer.receive();
 			System.out.println("message = " + message.getBodyBuffer().readString());
 
-			consumer.close();
-			session.close();
+			locator.close();
 			System.out.println("Consumer done!");
 		} catch (ActiveMQException e) {
 			System.err.println("Problem with the session: " + e.getMessage());
