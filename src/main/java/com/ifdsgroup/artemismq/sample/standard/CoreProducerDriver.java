@@ -8,7 +8,7 @@ import org.apache.activemq.artemis.api.core.client.ServerLocator;
 
 public class CoreProducerDriver {
 
-	private static final String ADDRESS_NAME = "jms.queue.queues/OrderQueue";
+	private static final String ADDRESS_NAME = "jms.queue.OrderQueue";
 
 	public static void main(String[] args) {
 		
@@ -19,10 +19,10 @@ public class CoreProducerDriver {
 			ClientProducer producer = session.createProducer(ADDRESS_NAME);
 			ClientMessage message = session.createMessage(true);
 			
-			message.getBodyBuffer().writeString("Fifth core messsage");
+			message.getBodyBuffer().writeString("A core order, which is not a JMS message.");
 			producer.send(message);
-
-			System.out.println("Producer done!");
+			message.acknowledge();
+			System.out.println("Core producer done!");
 		} catch (Exception e) {
 			System.err.println("Problem creating the session factory: " + e.getMessage());
 			e.printStackTrace();
